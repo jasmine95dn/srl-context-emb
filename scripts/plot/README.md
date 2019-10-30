@@ -3,12 +3,12 @@
 All these files must be in folder span-based-srl/scripts (span-based-srl is the cloned git repository of Ouchi's model under https://github.com/hiroki13/span-based-srl)
 
 ### Requirements
-* [python3]
-* [matplotlib]
-* [numpy]
-* [scikit-learn]
-* [pandas]
-* [ordered_set]
+* [python3](https://www.python.org/downloads/)
+* [matplotlib](https://matplotlib.org/)
+* [numpy](https://numpy.org/)
+* [scikit-learn](https://scikit-learn.org/stable/)
+* [pandas](https://pandas.pydata.org/)
+* [ordered_set](https://pypi.org/project/ordered-set/)
 
 ## Run scatter plot for label embeddings
 ```
