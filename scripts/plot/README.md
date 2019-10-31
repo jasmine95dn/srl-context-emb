@@ -24,6 +24,6 @@ python plot.py path/to/[gold_test_label] path/to/[predicted_label].prop -m -e em
 ```
 python plot.py paths/to/hist.txt  -p -e embedding_names --valid(/--train) (--save) (--output_dir output)
 ```
-Note: Line plot for progress of 4 types of embeddings on datas
+Note: Line plot for progress of 4 types of embeddings on datas.
 This is specifically set for plot of 2x2 (4 types of embeddings), some hyper- und parameters should be adapted again for later use of this for another dimension, lines that need changes will be marked at the end with ``#***```
 
