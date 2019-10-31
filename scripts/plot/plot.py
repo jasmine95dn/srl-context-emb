@@ -100,13 +100,14 @@ def load_progress(file, train=True, valid=True):
 	:return: (np.array) a object that saved result of each epoch as an element in an 1-D array
 	'''
 	import re
+	import random
 	assert type(file) == str
 
 	if train and valid:
 		sys.stderr.write('Only choose one so as not to be messed up\n')
 		sys.exit(1)
 
-	regex = r'[\d]+.?[\d]+'
+	regex = r'[\d]*\.?[\d]+'
 	prog = [None] * 101
 	
 	with open(file) as f:
@@ -116,16 +117,28 @@ def load_progress(file, train=True, valid=True):
 		if valid:
 			old_ep = 1
 			for line in f.readlines()[1:]:
+				#print(re.findall(regex, line))
 				ep, score = re.findall(regex, line)
-				if int(ep) - old_ep > 1:
-					for idx in range(old_ep+1, int(ep)):
+				ep = int(ep)
+				score = float(score)
+				if ep - old_ep > 1:
+					for idx in range(old_ep+1, ep):
+						# in normal output from Ouchi's model, 
+						# only F1 score on validating set that is higher than the former one will be saved
+						# so the epochs in between will have the score randomly in the range between this score and its previous one
+						#prog[idx] = round(random.uniform(prog[old_ep], score))
+
+						# instead of randomly choose between ranges, 
+						# epochs that has no reported F1 Score will be
+						# the same one with the latest epoch (not the actual one)
 						prog[idx] = prog[old_ep]
-				prog[int(ep)] = float(score)
-				old_ep = int(ep)
+				prog[ep] = score
+				old_ep = ep
 
 			# if last epoch in report with higher F-Score is not epoch 100
 			if old_ep < len(prog) - 1:
 				for idx in range(old_ep+1, len(prog)):
+					#prog[idx] = round(random.uniform(prog[old_ep]-1.00, prog[old_ep]))
 					prog[idx] = prog[old_ep]
 
 		# this file has other format, 
@@ -184,7 +197,7 @@ def scatterplot(vectors, labels, size, emb='', save=False, outdir='./'):
 		ax.scatter(v[0], v[1], color=color, alpha=0.5, label=label)
 		ax.annotate(xy=(v[0]+0.001, v[1]+0.001), s=label, weight='bold')
 
-	ax.legend(loc='best')#bbox_to_anchor=(1.05,1), ncol=4)
+	ax.legend(loc='best')
 	ax.set_title('%s embedding'%emb, weight='bold')
 	plt.axis('on')
 	plt.tight_layout()
@@ -339,7 +352,6 @@ def cf_matrix_plot(matrix, labels, size, emb='', save=False, outdir='./', err=Tr
 	plt.tight_layout()
 	plt.suptitle('gold /\npredict', x=0.02, y=0.9, horizontalalignment='left', size=9, weight='bold', verticalalignment='bottom')
 	plt.xlabel('%s embedding'%emb, weight='bold')
-	#plt.ylabel('predict')
 
 	name = None
 	if save:
@@ -379,8 +391,10 @@ def line(datas, size, epochs=range(1,101), dataset='', save=False, outdir='./'):
 	lines that need changes will be marked at the end with ***
 	'''
 
+	assert len(datas) == 4
+
 	# make data frame
-	df = pd.DataFrame({'x': epochs, **data})
+	df = pd.DataFrame({'x': epochs, **datas})
 
 	# initialize the figure
 	plt.style.use('seaborn')
@@ -388,41 +402,34 @@ def line(datas, size, epochs=range(1,101), dataset='', save=False, outdir='./'):
 	# create a color palette
 	palette = plt.get_cmap('Set1')
 
-	# set figure size
-	plt.figure(figsize=size, dpi=80)
+	## set subplots
+	fig, ax = plt.subplots(2,2, sharex='col', sharey='row', figsize=size, dpi=80) # ***
 
-	# multiple line plot
-	for data, num in zip(df.drop('x', axis=1), range(1, len(datas)+1)):
+	subplots = [(i,j) for i in range(2) for j in range(2)] # ***
 
-		# Find the right spot on the plot
-		plt.subplot(2,2, num) # ***
+	## multiple line plot
+	for data, (i, j), num in zip(df.drop('x', axis=1), subplots, range(1, len(datas)+1)):
 
-		# plot every groups, but discreet
+		## plot every groups but discrete
 		for v in df.drop('x', axis=1):
-			plt.plot(df['x'], df[v], marker='', color='grey', linewidth=0.6, alpha=0.3)
+			ax[i, j].plot(df['x'], df[v], marker='', color='grey', linewidth=0.6, alpha=0.3)
 
-		# plot the lineplot
-		plt.plot(df['x'], df[data], marker='', color=palette(num), linewidth=2.4, alpha=0.9, label=data)
+		## plot the line plot
+		ax[i, j].plot(df['x'], df[data], marker='', color=palette(num), linewidth=2.4, alpha=0.9, label=data)
 
-		# Same limits for everybody
-		plt.xlim(0,101) # ***
-		plt.ylim(60,100) # ***
+		## Same limits for everybody
+		ax[i, j].set_xlim(0,101)
+		ax[i, j].set_ylim(60,100)
 
-		# Not ticks everywhere
-		if num in range(2): # ***
-			plt.tick_params(labelbottom='off')
-		if num not in [1,3]: # ***
-			plt.tick_params(labelleft='off')
+		# Add title
+		ax[i, j].set_title(data, loc='center', fontsize=15, fontweight=2, color=palette(num))
 
-		# add title
-		plt.title(data, loc='center', fontsize=15, fontweight=2, color=palette(num))
+	## add title
+	fig.suptitle('How well is the model trained on development set with each embedding?', horizontalalignment='center', x=0.5, y=0.95, fontsize=20, fontweight=5, color='black')#, y=1.02)
 
-	# general title
-	plt.suptitle('How well does the model work\n with each embedding?', fontsize=17, fontweight=2, color='black', y=1.02)
-
-	# axis title
-	plt.ylabel('Accuracy in percentage')
-	plt.xlabel('Epoch')
+	## set common labels
+	fig.text(0.5, 0.04, 'Epoch', ha='center', va='center',fontsize=15, fontweight=3)
+	fig.text(0.06, 0.5, 'F1 Score', ha='center', va='center', rotation='vertical', fontsize=15, fontweight=3)
 
 	name = None
 	if save:
@@ -438,12 +445,10 @@ def line(datas, size, epochs=range(1,101), dataset='', save=False, outdir='./'):
 
 # main function
 def main():
-	# display progress logs on stdout
-	logging.basicConfig(level=logging.INFO, format='%(asctime)s: %(levelname)s %(mesagge)s')
-
 	args = arguments()
 
-	labels = load_labels(args.label)
+	if args.label:
+		labels = load_labels(args.label)
 
 	if all([args.vector, args.matrix, args.plot, args.train, args.valid]):
 		sys.stderr.write('Choose only one type of plotting\n')
@@ -501,8 +506,6 @@ def main():
 			# create datas for true and predicted labels
 			true_labels, pred_labels = create_data(y_true, y_pred)
 
-			#print(args.error)
-
 			# calculate confusion matrix for labeling results (errors / correctness)
 			matrix = cf_matrix(true_labels, pred_labels, labels, error=args.error)
 
@@ -535,6 +538,8 @@ def main():
 		line(datas_prog, size=size, dataset=dataset, save=args.save, outdir=outdir)
 
 if __name__ == '__main__':
+	# display progress logs on stdout
+	logging.basicConfig(level=logging.INFO, format='%(asctime)s: %(levelname)s %(mesagge)s')
 	main()
 
 

@@ -3,12 +3,7 @@
 All these files must be in folder span-based-srl/scripts (span-based-srl is the cloned git repository of Ouchi's model under https://github.com/hiroki13/span-based-srl)
 
 ### Requirements
-* [python3](https://www.python.org/downloads/)
-* [matplotlib](https://matplotlib.org/)
-* [numpy](https://numpy.org/)
-* [scikit-learn](https://scikit-learn.org/stable/)
-* [pandas](https://pandas.pydata.org/)
-* [ordered_set](https://pypi.org/project/ordered-set/)
+run this file to set requirements ```install.sh```
 
 ## Run scatter plot for label embeddings
 ```
@@ -22,8 +17,6 @@ python plot.py path/to/[gold_test_label] path/to/[predicted_label].prop -m -e em
 
 ## Run line plot for training progress on development set
 ```
-python plot.py paths/to/hist.txt  -p -e embedding_names --valid(/--train)
+python plot.py path/to/hist.txt -p -e embedding_name --valid(/--train)
 ```
-Note: Line plot for progress of 4 types of embeddings on datas
-This is specifically set for plot of 2x2 (4 types of embeddings), some hyper- und parameters should be adapted again for later use of this for another dimension, lines that need changes will be marked at the end with
 
