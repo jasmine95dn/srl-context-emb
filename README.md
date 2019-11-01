@@ -1,6 +1,6 @@
 # srl-context-emb
 
-A small research of interaction between span-based Model from Ouchi et al. (2018) and types of contextualized embeddings (focused on ELMo, BERT and stacked Embeddings between Flair and BERT) with SENNA Embeddings as an example of baseline. All datas used come from CoNLL 2012 
+A small research of interaction between span-based Model from [Ouchi et al. (2018)](https://github.com/hiroki13/span-based-srl) and types of contextualized embeddings (focused on ELMo, BERT and stacked Embeddings between Flair and BERT) with SENNA Embeddings as an example of baseline. All datas used come from [CoNLL 2012](http://conll.cemantix.org/2012/task-description.html).
 
 ## Folder *scripts*
 There are 3 folders in the folder ***scripts***:
