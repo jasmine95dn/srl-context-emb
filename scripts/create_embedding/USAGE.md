@@ -19,4 +19,5 @@ This script is based on the same format of the output of ```allennlp elmo <input
 ```python bert_flair_emb.py -f <sentences.txt> -s```
 
 *sentences.txt*: Data set in form of each line a sentence (all tokens including punctuations are separated through space/tab)
+
 More details: ```python bert_flair_emb.py -h```
