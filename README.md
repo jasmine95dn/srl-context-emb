@@ -1,8 +1,9 @@
 # srl-context-emb
 
-A small research of interaction between span-based Model from Ouchi et al. (2018) and types of contextualized embeddings (focused on ELMo, BERT and stacked Embeddings between Flair and BERT) with SENNA Embeddings as an example of baseline
+A small research of interaction between span-based Model from Ouchi et al. (2018) and types of contextualized embeddings (focused on ELMo, BERT and stacked Embeddings between Flair and BERT) with SENNA Embeddings as an example of baseline. All datas used come from CoNLL 2012 
 
-There are 3 folders in the folder *scripts*:
+## Folder *scripts*
+There are 3 folders in the folder ***scripts***:
 
 ### *create_embedding*
 This file provides some codes to create the contextualized embeddings I used for my experiment.
@@ -14,3 +15,6 @@ This file provides scripts to create 3 types of plots for results in experiment 
 
 ### *prepare*
 This file provides codes to prepare the raw datas for embeddings training and gold standards for evaluation.
+
+## Folder *results*
+Results for each types of embeddings including visualizations, evaluations for results at different epochs for test set, training report (output from this model).
