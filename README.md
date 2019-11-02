@@ -18,3 +18,4 @@ This file provides codes to prepare the raw datas for embeddings training and go
 
 ## Folder *results*
 Results for each types of embeddings including visualizations, evaluations for results at different epochs for test set, training report (output from this model).
+**Note**: all train reports for *BERT* and *Stacked* have the same name types of *ELMo* as Ouchi only offers 2 types of trained embeddings: non-contextualised and ELMo (on behalf of contextualised) embeddings.
