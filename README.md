@@ -18,3 +18,6 @@ These scripts are to prepare the raw datas for embeddings training and gold stan
 Results for each types of embeddings including visualizations, evaluations for results at different epochs for test set, training report (output from this model).
 
 **Note**: all train reports for *BERT* and *Stacked* have the same name types of *ELMo* as Ouchi only offers 2 types of trained embeddings: non-contextualised and ELMo (on behalf of contextualised) embeddings.
+
+## Report
+- Report in German written for the results created in October 2019.
