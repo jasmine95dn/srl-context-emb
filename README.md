@@ -16,6 +16,9 @@ A small research of interaction between span-based Model from [Ouchi et al. (201
 │   └── stacked_bert-flair
 ```
 
+## Performance in general
+
+![alt text](https://github.com/jasmine95dn/srl-context-emb/blob/master/results/progress_valid_data.png)
 
 **Note**: all train reports for *BERT* and *Stacked* have the same name types of *ELMo* as Ouchi only offers 2 types of trained embeddings: non-contextualised and ELMo (on behalf of contextualised) embeddings.
 
